@@ -3,6 +3,7 @@
 Halaman sederhana "link-in-bio" resmi untuk Whoisdanz (@whoisdanz12) – tempat mengumpulkan semua link sosial media, donasi, dan konten utama dalam satu tampilan clean & dark theme.
 
 ![Preview Halaman](preview.png)
+![Preview Halaman](preview2.png)
 
 ## Fitur Utama
 - Loading screen animasi premium (ring mutar + progress bar halus)
