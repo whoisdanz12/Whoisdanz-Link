@@ -25,12 +25,12 @@ Halaman sederhana "link-in-bio" resmi untuk Whoisdanz (@whoisdanz12) – tempat 
 - Audio HTML5 untuk background music
 
 ## Struktur Folder
-├── index.html          # Halaman utama
-├── style.css           # Semua styling
-├── script.js           # Logika QR modal & background music
-├── profile.png         # Foto profil (circular)
-├── qr.png              # Gambar QR donasi
-└── soundtrack.mp3      # File musik background (loop)
+├── index.html
+├── style.css
+├── script.js
+├── profile.png
+├── qr.png
+└── soundtrack.mp3
 
 ## Cara Deploy Sendiri
 1. Clone atau download repository ini
