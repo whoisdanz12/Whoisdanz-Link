@@ -8,21 +8,15 @@
 </head>
 <body>
 
+<!-- LOADING SCREEN (dengan bubble & typing) -->
 <div id="loading-screen">
     <div class="loading-content">
         <div class="logo-wrapper">
             <img src="profile.png" class="loading-logo">
             <div class="ring"></div>
         </div>
-        <div class="loading-bar">
-            <div class="loading-progress" id="loading-progress"></div>
-        </div>
-    </div>
-</div>
 
-<div class="container">
-    <div class="profile-wrapper">
-        <img src="profile.png" class="profile">
+        <!-- Bubble di loading screen -->
         <div class="speech-bubble">
             <p class="typing-text">
                 <span class="typed-text"></span>
@@ -30,8 +24,16 @@
             </p>
             <div class="bubble-tail"></div>
         </div>
+
+        <div class="loading-bar">
+            <div class="loading-progress" id="loading-progress"></div>
+        </div>
     </div>
-    
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+    <img src="profile.png" class="profile">
     <h1>Whoisdanz</h1>
     <p>Official Links & Support</p>
 
@@ -46,6 +48,7 @@
     </div>
 </div>
 
+<!-- QR MODAL -->
 <div id="qrModal" class="modal">
     <div class="qr-box">
         <span class="close" id="closeQR">&times;</span>
@@ -57,8 +60,10 @@
     </div>
 </div>
 
+<!-- BACKGROUND MUSIC -->
 <audio id="bg-music" preload="metadata" loop></audio>
 
+<!-- FOOTER -->
 <footer class="footer">
     <a href="https://github.com/whoisdanz12" target="_blank" class="footer-link">
         &copy; 2026 Official Whoisdanz. All rights reserved.

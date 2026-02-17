@@ -1,3 +1,4 @@
+/* BODY & CONTAINER */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -11,114 +12,119 @@ body {
     padding: 0 15px;
 }
 
-.profile-wrapper {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 30px;
-}
-
 .profile {
     width: 140px;
     border-radius: 50%;
-    border: 4px solid #222;
-    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    margin-bottom: 15px;
 }
 
-.speech-bubble {
-    position: absolute;
-    top: 50%;
-    left: 100%;
-    transform: translateY(-50%);
-    margin-left: 20px;
+/* LINKS */
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.links a,
+.links button {
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
     background: #111;
-    color: #fff;
-    padding: 14px 18px;
-    border-radius: 12px;
-    border: 2px solid #333;
-    width: 240px;
-    
-    font-size: 14px;
-    line-height: 1.45;
-    text-align: left;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-    opacity: 0.95;
-    overflow: hidden;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
-.speech-bubble p {
-    margin: 0;
+.links a:hover,
+.links button:hover {
+    background: #222;
 }
 
-.bubble-tail {
+/* QR MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.qr-box {
+    background: #111;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    position: relative;
+    width: 260px;
+    animation: fadeIn 0.3s ease;
+}
+
+.qr-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.qr-preview {
+    width: 200px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.download-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    background: #222;
+    border-radius: 20px;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.download-btn:hover {
+    background: #333;
+    box-shadow: 0 0 10px rgba(255,255,255,0.4);
+}
+
+.close {
     position: absolute;
-    top: 50%;
-    right: 100%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-top: 14px solid transparent;
-    border-bottom: 14px solid transparent;
-    border-right: 18px solid #111;
+    top: 8px;
+    right: 12px;
+    font-size: 20px;
+    cursor: pointer;
 }
 
-.typing-text {
-    display: inline-block;
-    white-space: pre-wrap;
-    text-align: left;
+/* FOOTER */
+.footer {
+    margin-top: 60px;
+    opacity: 0.6;
 }
 
-.typed-text {
-    opacity: 0;
+.footer-link {
+    color: white;
+    text-decoration: none;
 }
 
-.cursor {
-    display: inline-block;
-    width: 2px;
-    height: 1.2em;
-    background: #fff;
-    vertical-align: middle;
-    animation: blink 0.7s infinite;
+.footer-link:hover {
+    opacity: 0.7;
 }
 
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
-
-.typing-active .typed-text {
-    opacity: 1;
-    animation: typing 5s steps(70, end) forwards;
-}
-
-@keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-}
-
-@media (max-width: 600px) {
-    .speech-bubble {
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        margin-left: 0;
-        margin-top: 20px;
-        width: 85%;
-        max-width: 280px;
-        text-align: center;
-    }
-    
-    .bubble-tail {
-        top: -18px;
-        left: 50%;
-        transform: translateX(-50%);
-        border-top: none;
-        border-bottom: 18px solid #111;
-        border-left: 14px solid transparent;
-        border-right: 14px solid transparent;
-    }
-}
-
+/* ==================== LOADING SCREEN DENGAN BUBBLE ==================== */
 #loading-screen {
     position: fixed;
     inset: 0;
@@ -134,7 +140,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: -60px;
+    position: relative;
+    margin-top: -40px;
 }
 
 .logo-wrapper {
@@ -168,8 +175,41 @@ body {
     100% { transform: rotate(360deg); }
 }
 
+/* Speech Bubble di Loading Screen - rekomendasi kanan bawah logo */
+.speech-bubble {
+    position: absolute;
+    bottom: -30px;
+    right: -40px;
+    background: #111;
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 2px solid #444;
+    width: 220px;
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: left;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+    z-index: 10;
+    opacity: 0.95;
+    overflow: hidden;
+}
+
+.bubble-tail {
+    position: absolute;
+    bottom: 100%;
+    right: 40px;
+    transform: translateX(50%);
+    width: 0;
+    height: 0;
+    border-bottom: none;
+    border-top: 14px solid #111;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+}
+
 .loading-bar {
-    margin-top: 50px;
+    margin-top: 80px; /* beri ruang lebih untuk bubble */
     width: 240px;
     height: 8px;
     background: #222;
@@ -185,99 +225,59 @@ body {
     transition: width 0.5s ease;
 }
 
-.links {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+/* TYPING ANIMATION */
+.typing-text {
+    display: inline-block;
+    white-space: pre-wrap;
 }
 
-.links a,
-.links button {
-    padding: 10px;
-    border-radius: 20px;
-    border: none;
-    background: #111;
-    color: white;
-    text-decoration: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+.typed-text {
+    opacity: 0;
 }
 
-.links a:hover,
-.links button:hover {
-    background: #222;
+.cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background: #fff;
+    vertical-align: middle;
+    animation: blink 0.8s infinite;
 }
 
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.8);
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
-.qr-box {
-    background: #111;
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    position: relative;
-    width: 260px;
+.typing-active .typed-text {
+    opacity: 1;
+    animation: typing 6s steps(70, end) forwards;
 }
 
-.qr-title {
-    margin-bottom: 15px;
-    font-size: 16px;
-    font-weight: 500;
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
 }
 
-.qr-preview {
-    width: 200px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-}
+/* Responsive mobile */
+@media (max-width: 600px) {
+    .speech-bubble {
+        position: absolute;
+        bottom: -20px;
+        right: 10px;
+        left: auto;
+        width: 75%;
+        max-width: 260px;
+        font-size: 12.5px;
+    }
 
-.download-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    background: #222;
-    border-radius: 20px;
-    color: white;
-    text-decoration: none;
-}
+    .bubble-tail {
+        right: 30px;
+    }
 
-.download-btn:hover {
-    background: #333;
-}
-
-.close {
-    position: absolute;
-    top: 8px;
-    right: 12px;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.footer {
-    margin-top: 60px;
-    opacity: 0.6;
-}
-
-.footer-link {
-    color: white;
-    text-decoration: none;
-}
-
-.footer-link:hover {
-    opacity: 0.7;
+    .loading-bar {
+        margin-top: 100px;
+    }
 }
 
 @media (max-width: 500px) {
@@ -286,5 +286,5 @@ body {
 }
 
 @media (max-height: 700px) {
-    .loading-content { margin-top: -90px; }
+    .loading-content { margin-top: -80px; }
 }
