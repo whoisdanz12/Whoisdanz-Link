@@ -72,3 +72,37 @@ window.addEventListener("load", () => {
         }
     }, 40);
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const typedTextElement = document.querySelector(".typed-text");
+    const fullText = "Tidak semua harapan harus menjadi kenyataan,\nnamun semua kenyataan berawal dari sebuah harapan.";
+    const typingSpeed = 60;
+
+    let charIndex = 0;
+
+    function type() {
+        if (charIndex < fullText.length) {
+            typedTextElement.textContent += fullText.charAt(charIndex);
+            charIndex++;
+            setTimeout(type, typingSpeed);
+        } else {
+            document.querySelector(".cursor").style.display = "none";
+        }
+    }
+    
+    const loading = document.getElementById("loading-screen");
+    const observer = new MutationObserver(() => {
+        if (loading.style.display === "none") {
+            document.querySelector(".speech-bubble").classList.add("typing-active");
+            type();
+            observer.disconnect();
+        }
+    });
+
+    observer.observe(loading, { attributes: true, attributeFilter: ["style"] });
+
+    if (loading.style.display === "none") {
+        document.querySelector(".speech-bubble").classList.add("typing-active");
+        type();
+    }
+});
