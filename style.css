@@ -14,7 +14,7 @@ body {
 .profile-wrapper {
     position: relative;
     display: inline-block;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .profile {
@@ -27,16 +27,18 @@ body {
 .speech-bubble {
     position: absolute;
     top: 50%;
-    left: 110%;
+    left: 100%;
     transform: translateY(-50%);
+    margin-left: 20px;
     background: #111;
     color: #fff;
-    padding: 12px 18px;
+    padding: 14px 18px;
     border-radius: 12px;
     border: 2px solid #333;
-    width: 220px;
+    width: 240px;
+    
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 1.45;
     text-align: left;
     box-shadow: 0 4px 15px rgba(0,0,0,0.6);
     opacity: 0.95;
@@ -54,9 +56,9 @@ body {
     transform: translateY(-50%);
     width: 0;
     height: 0;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-    border-right: 16px solid #111;
+    border-top: 14px solid transparent;
+    border-bottom: 14px solid transparent;
+    border-right: 18px solid #111;
 }
 
 .typing-text {
@@ -85,7 +87,7 @@ body {
 
 .typing-active .typed-text {
     opacity: 1;
-    animation: typing 4s steps(60, end) forwards;
+    animation: typing 5s steps(70, end) forwards;
 }
 
 @keyframes typing {
@@ -93,18 +95,28 @@ body {
     to { width: 100%; }
 }
 
-.footer {
-    margin-top: 60px;
-    opacity: 0.6;
-}
-
-.footer-link {
-    color: white;
-    text-decoration: none;
-}
-
-.footer-link:hover {
-    opacity: 0.7;
+@media (max-width: 600px) {
+    .speech-bubble {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-left: 0;
+        margin-top: 20px;
+        width: 85%;
+        max-width: 280px;
+        text-align: center;
+    }
+    
+    .bubble-tail {
+        top: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-top: none;
+        border-bottom: 18px solid #111;
+        border-left: 14px solid transparent;
+        border-right: 14px solid transparent;
+    }
 }
 
 #loading-screen {
@@ -217,14 +229,9 @@ body {
     text-align: center;
     position: relative;
     width: 260px;
-    animation: fadeIn 0.3s ease;
 }
 
 .qr-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
     margin-bottom: 15px;
     font-size: 16px;
     font-weight: 500;
@@ -240,18 +247,15 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
     padding: 10px;
     background: #222;
     border-radius: 20px;
     color: white;
     text-decoration: none;
-    transition: 0.3s;
 }
 
 .download-btn:hover {
     background: #333;
-    box-shadow: 0 0 10px rgba(255,255,255,0.4);
 }
 
 .close {
@@ -262,19 +266,18 @@ body {
     cursor: pointer;
 }
 
-@media (max-width: 600px) {
-    .speech-bubble {
-        position: static;
-        transform: none;
-        margin: 20px auto 0;
-        width: 90%;
-        max-width: 280px;
-        text-align: center;
-    }
-    
-    .bubble-tail {
-        display: none;
-    }
+.footer {
+    margin-top: 60px;
+    opacity: 0.6;
+}
+
+.footer-link {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    opacity: 0.7;
 }
 
 @media (max-width: 500px) {

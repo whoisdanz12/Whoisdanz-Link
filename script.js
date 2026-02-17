@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector(".cursor").style.display = "none";
         }
     }
-    
+
     const loading = document.getElementById("loading-screen");
     const observer = new MutationObserver(() => {
         if (loading.style.display === "none") {
