@@ -1,65 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Official Links & Support Whoisdanz</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Official Links & Support Whoisdanz</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div id="loading-screen">
     <div class="loading-content">
         <div class="logo-wrapper">
-            <img src="profile.png" class="loading-logo" alt="Profile">
+            <img src="profile.png" class="loading-logo">
             <div class="ring"></div>
+        </div>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loading-progress"></div>
         </div>
     </div>
 </div>
 
-<main class="container">
-    <img src="profile.png" class="profile" alt="Profile Whoisdanz">
+<div class="container">
+    <img src="profile.png" class="profile">
     <h1>Whoisdanz</h1>
     <p>Official Links & Support</p>
 
-    <nav class="links">
-        <a href="https://www.tiktok.com/@whoisdanz12" target="_blank" rel="noopener noreferrer">TikTok</a>
-        <a href="https://www.youtube.com/@whoisdanz12" target="_blank" rel="noopener noreferrer">YouTube</a>
-        <a href="https://discord.gg/hnZhbbq4" target="_blank" rel="noopener noreferrer">Discord</a>
-        <a href="https://github.com/whoisdanz12" target="_blank" rel="noopener noreferrer">Github</a>
-        <a href="https://saweria.co/Whoisdanz" target="_blank" rel="noopener noreferrer">Saweria</a>
-        <a href="https://bagibagi.co/Whoisdanz12" target="_blank" rel="noopener noreferrer">Bagibagi</a>
+    <div class="links">
+        <a href="https://www.tiktok.com/@whoisdanz12" target="_blank">TikTok</a>
+        <a href="https://www.youtube.com/@whoisdanz12" target="_blank">YouTube</a>
+        <a href="https://discord.gg/hnZhbbq4" target="_blank">Discord</a>
+        <a href="https://github.com/whoisdanz12" target="_blank">Github</a>
+        <a href="https://saweria.co/Whoisdanz" target="_blank">Saweria</a>
+        <a href="https://bagibagi.co/Whoisdanz12" target="_blank">Bagibagi</a>
         <button id="qrBtn">QR Donasi</button>
-    </nav>
-</main>
+    </div>
+</div>
 
 <div id="qrModal" class="modal">
     <div class="qr-box">
         <span class="close" id="closeQR">&times;</span>
-
         <div class="qr-title">QR Donasi</div>
 
-        <div class="qr-selector">
-            <button class="qr-option active" data-qr="1">QR 1</button>
-            <button class="qr-option" data-qr="2">QR 2</button>
+        <img src="QR-Donasi-Whoisdanz.png" class="qr-preview" id="qrImage">
+
+        <div class="qr-controls">
+            <button id="prevQR">◀</button>
+            <button id="nextQR">▶</button>
         </div>
 
-        <div class="qr-slider">
-            <img src="QR-Donasi-Whoisdanz.png" class="qr-preview active" data-qr="1">
-            <img src="QR-Donasi2-Whoisdanz.png" class="qr-preview" data-qr="2">
+        <div class="download-options">
+            <a href="QR-Donasi-Whoisdanz.png" download class="download-btn">Download QR 1</a>
+            <a href="QR-Donasi2-Whoisdanz.png" download class="download-btn">Download QR 2</a>
         </div>
-
-        <a id="downloadQR" href="QR-Donasi-Whoisdanz.png" download class="download-btn">
-            Download QR
-        </a>
     </div>
 </div>
 
 <audio id="bg-music" preload="metadata" loop></audio>
 
 <footer class="footer">
-    <a href="https://github.com/whoisdanz12" target="_blank" rel="noopener noreferrer" class="footer-link">
-        &copy; 2026 Official Whoisdanz
+    <a href="https://github.com/whoisdanz12" target="_blank" class="footer-link">
+        © 2026 Official Whoisdanz. All rights reserved.
     </a>
 </footer>
 
