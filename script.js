@@ -17,7 +17,6 @@ window.addEventListener("click", (e) => {
 });
 
 /* QR SLIDER */
-
 const qrImages = [
     "QR-Donasi-Whoisdanz.png",
     "QR-Donasi2-Whoisdanz.png"
@@ -43,8 +42,7 @@ nextQR.addEventListener("click", () => {
     updateQR();
 });
 
-/* MUSIC SYSTEM */
-
+/* MUSIC */
 const music = document.getElementById("bg-music");
 const soundtrackFile = "soundtrack.mp3";
 
@@ -66,8 +64,7 @@ document.addEventListener("click", () => {
     }
 }, { once: true });
 
-/* LOADING SCREEN */
-
+/* LOADING */
 window.addEventListener("load", () => {
     const loading = document.getElementById("loading-screen");
     const progressBar = document.getElementById("loading-progress");
