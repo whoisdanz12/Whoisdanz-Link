@@ -2,19 +2,12 @@ const qrBtn = document.getElementById("qrBtn");
 const qrModal = document.getElementById("qrModal");
 const closeQRBtn = document.getElementById("closeQR");
 
-qrBtn.addEventListener("click", () => {
-    qrModal.style.display = "flex";
-});
+qrBtn.onclick = () => qrModal.style.display = "flex";
+closeQRBtn.onclick = () => qrModal.style.display = "none";
 
-closeQRBtn.addEventListener("click", () => {
-    qrModal.style.display = "none";
-});
-
-window.addEventListener("click", (e) => {
-    if (e.target === qrModal) {
-        qrModal.style.display = "none";
-    }
-});
+window.onclick = (e) => {
+    if (e.target === qrModal) qrModal.style.display = "none";
+};
 
 /* QR SLIDER */
 const qrImages = [
@@ -23,77 +16,50 @@ const qrImages = [
 ];
 
 let currentQR = 0;
-
 const qrImage = document.getElementById("qrImage");
-const prevQR = document.getElementById("prevQR");
-const nextQR = document.getElementById("nextQR");
 
-function updateQR() {
-    qrImage.src = qrImages[currentQR];
-}
-
-prevQR.addEventListener("click", () => {
+document.getElementById("prevQR").onclick = () => {
     currentQR = (currentQR - 1 + qrImages.length) % qrImages.length;
-    updateQR();
-});
+    qrImage.src = qrImages[currentQR];
+};
 
-nextQR.addEventListener("click", () => {
+document.getElementById("nextQR").onclick = () => {
     currentQR = (currentQR + 1) % qrImages.length;
-    updateQR();
-});
+    qrImage.src = qrImages[currentQR];
+};
+
+/* DOWNLOAD MENU */
+const downloadToggle = document.getElementById("downloadToggle");
+const downloadMenu = document.getElementById("downloadMenu");
+
+downloadToggle.onclick = () => {
+    downloadMenu.style.display =
+        downloadMenu.style.display === "flex" ? "none" : "flex";
+};
 
 /* MUSIC */
 const music = document.getElementById("bg-music");
-const soundtrackFile = "soundtrack.mp3";
-
-function startMusic() {
-    music.src = soundtrackFile;
-    music.play().catch(() => {});
-}
-
+music.src = "soundtrack.mp3";
 music.volume = 0.25;
 
-let hasInteracted = false;
 document.addEventListener("click", () => {
-    if (!hasInteracted) {
-        if (music.muted) {
-            music.muted = false;
-            if (music.paused) startMusic();
-        }
-        hasInteracted = true;
-    }
+    music.play().catch(() => {});
 }, { once: true });
 
 /* LOADING */
-window.addEventListener("load", () => {
+window.onload = () => {
     const loading = document.getElementById("loading-screen");
-    const progressBar = document.getElementById("loading-progress");
+    const bar = document.getElementById("loading-progress");
 
-    let width = 0;
-    const interval = setInterval(() => {
-        width += 1;
-        progressBar.style.width = width + "%";
-
-        if (width >= 100) {
-            clearInterval(interval);
-
+    let w = 0;
+    const int = setInterval(() => {
+        w++;
+        bar.style.width = w + "%";
+        if (w >= 100) {
+            clearInterval(int);
             setTimeout(() => {
-                loading.style.opacity = "0";
-
-                setTimeout(() => {
-                    loading.style.display = "none";
-
-                    music.muted = true;
-                    startMusic();
-
-                    music.addEventListener("playing", () => {
-                        setTimeout(() => {
-                            music.muted = false;
-                        }, 300);
-                    }, { once: true });
-
-                }, 600);
-            }, 400);
+                loading.style.display = "none";
+            }, 500);
         }
-    }, 40);
-});
+    }, 30);
+};
