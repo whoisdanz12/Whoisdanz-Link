@@ -1,74 +1,53 @@
+// MODAL
 const qrBtn = document.getElementById("qrBtn");
 const qrModal = document.getElementById("qrModal");
 const closeQRBtn = document.getElementById("closeQR");
 
-qrBtn.addEventListener("click", () => {
-    qrModal.style.display = "flex";
+qrBtn.onclick = () => qrModal.style.display = "flex";
+closeQRBtn.onclick = () => qrModal.style.display = "none";
+
+qrModal.onclick = (e) => {
+    if (e.target === qrModal) qrModal.style.display = "none";
+};
+
+// QR SWITCH
+const qrOptions = document.querySelectorAll(".qr-option");
+const qrImages = document.querySelectorAll(".qr-preview");
+const downloadBtn = document.getElementById("downloadQR");
+
+qrOptions.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const id = btn.dataset.qr;
+
+        qrOptions.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        qrImages.forEach(img => {
+            img.classList.remove("active");
+            if (img.dataset.qr === id) {
+                img.classList.add("active");
+                downloadBtn.href = img.src;
+                downloadBtn.setAttribute("download", img.src);
+            }
+        });
+    });
 });
 
-closeQRBtn.addEventListener("click", () => {
-    qrModal.style.display = "none";
-});
-
-window.addEventListener("click", (e) => {
-    if (e.target === qrModal) {
-        qrModal.style.display = "none";
-    }
-});
-
+// MUSIC (clean version)
 const music = document.getElementById("bg-music");
-const soundtrackFile = "soundtrack.mp3";
-
-function startMusic() {
-    music.src = soundtrackFile;
-    music.play()
-        .then(() => console.log("Musik dimulai:", soundtrackFile))
-        .catch(err => console.log("Play gagal:", err.message));
-}
-
 music.volume = 0.25;
 
-let hasInteracted = false;
-document.addEventListener('click', () => {
-    if (!hasInteracted) {
-        if (music.muted) {
-            music.muted = false;
-            if (music.paused) {
-                startMusic();
-            }
-        }
-        hasInteracted = true;
+document.addEventListener("click", () => {
+    if (!music.src) {
+        music.src = "soundtrack.mp3";
+        music.play().catch(()=>{});
     }
 }, { once: true });
 
+// LOADING (simple)
 window.addEventListener("load", () => {
     const loading = document.getElementById("loading-screen");
-    const progressBar = document.getElementById("loading-progress");
-    
-    let width = 0;
-    const interval = setInterval(() => {
-        width += 1;
-        progressBar.style.width = width + "%";
-        
-        if (width >= 100) {
-            clearInterval(interval);
-            
-            setTimeout(() => {
-                loading.style.opacity = "0";
-                
-                setTimeout(() => {
-                    loading.style.display = "none";
-                    
-                    music.muted = true;
-                    startMusic();
-                    
-                    music.addEventListener('playing', () => {
-                        if (music.muted) {
-                            setTimeout(() => { music.muted = false; }, 300);
-                        }
-                    }, { once: true });
-                }, 600);
-            }, 400);
-        }
-    }, 40);
+    setTimeout(() => {
+        loading.style.display = "none";
+    }, 600);
 });
