@@ -200,3 +200,21 @@ body {
     width: 0%;
     background: linear-gradient(to right, #fff, #aaa);
 }
+
+/* TOAST NOTIFICATION */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.9);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    z-index: 1000;
+    pointer-events: none;
+    white-space: nowrap;
+    font-family: monospace;
+    border-left: 3px solid #fff;
+}
